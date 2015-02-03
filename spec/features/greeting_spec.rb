@@ -25,4 +25,10 @@ RSpec.describe "`greet` example" do
     end
   end
 
+  describe "examples/greet yell -h" do
+    it "includes the parent and subcommand in the program_name" do
+      expect(stdout).to include "Usage: greet yell"
+    end
+  end
+
 end
