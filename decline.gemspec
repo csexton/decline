@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "decline"
   spec.version       = Decline::VERSION
   spec.authors       = ["Christopher Sexton"]
-  spec.email         = ["github@codeography.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.email         = ["csexton@codeography.com"]
+  spec.summary       = %q{Lightweight CLI Builder}
+  spec.description   = %q{Build lightweight, modular, testable command line apps.}
+  spec.homepage      = "https://github.com/csexton/decline"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
