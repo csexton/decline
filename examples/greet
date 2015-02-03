@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+# Run with bundler:
+#
+# bundle exec ./examples/greet.rb
+#
+
+require 'decline'
+require 'pry'
+# A little test app that exercises commands and options
+#
+# greet joe
+# => Hi joe
+#
+# greet --bang joe
+# => Hi joe!
+#
+# greet yell joe
+# => HELLO JOE!!!
+#
+#
+class GreeterApp < Decline::Command
+  def options(cli)
+    cli.on("-b", "--bang", "Add excitment") do |value|
+      config.bang = value
+    end
+  end
+
+  def call(*args)
+    puts "#{args.join}#{config.bang ? '!' : ''}"
+  end
+end
+
+class YellCommand < Decline::Command
+  def call(args)
+    puts "#{args.join.upcase}#{config.bang ? '!' : ''}"
+  end
+end
+
+app = GreeterApp.new
+app.add_command :yell, YellCommand.new
+
+exit app.run(ARGV)
