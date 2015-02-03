@@ -3,8 +3,8 @@ require 'ostruct'
 
 module Decline
   class Command
-    attr_reader :config, :default_config
-    attr_accessor :default_config
+    attr_reader :config
+    attr_accessor :program_name
 
     def add_command(name, command)
       @subcommands ||= Hash.new
@@ -12,25 +12,28 @@ module Decline
       self
     end
 
-    def parser
-      @config ||= OpenStruct.new @default_config
-      @parser ||= OptionParser.new
-      self.options(@parser) if self.respond_to? :options
-      @parser
+    def run(argv, parent_config=nil)
+      # I didn't want to use `order!` here because it will mutate argv, but it
+      parsed_args = Array(parser(parent_config).order!(argv))
+      call_command(parsed_args)
     end
 
-    def run(argv)
-      parsed_args = Array(parser.order(argv))
-      call_command(parsed_args) || 0
-    end
-
-    def call
+    # Default call method. This should be overridden.
+    def call(*args)
       puts parser.help
-      return 1
+      exit 1
     end
 
 
     private
+
+    def parser(parent_config={})
+      @config ||= OpenStruct.new parent_config
+      @parser ||= OptionParser.new
+
+      self.options(@parser) if self.respond_to? :options
+      @parser
+    end
 
     def has_subcommand?(name)
       @subcommands && @subcommands.has_key?(name)
@@ -38,8 +41,7 @@ module Decline
 
     def call_subcommand(name, *argv)
       cmd = @subcommands[name]
-      cmd.default_config = config
-      cmd.run(argv)
+      cmd.run(argv, config)
     end
 
     def call_command(argv)

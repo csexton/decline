@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# Run with bundler:
+#
+# bundle exec ./examples/line-numbers
+#
+
+require 'decline'
+require 'pry'
+
+class LineNumberApp < Decline::Command
+  def options(cli)
+    # Setup any default config options
+    config.base = 10
+
+    # Add command line options to override those defaults
+    cli.on("-h", "--hex", "Print Line Numbers in Hexadecimal") do
+      config.base = 16
+    end
+  end
+
+  def call(*args)
+    ARGF.each_line.with_index do |line, number|
+      converted_number = (number+1).to_s(config.base).upcase
+      formatted_number = "%-5s" % converted_number
+
+      puts "#{formatted_number}#{line}"
+    end
+  end
+end
+
+app = LineNumberApp.new
+app.run(ARGV)

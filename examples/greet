@@ -16,9 +16,12 @@ require 'pry'
 # => Hi joe!
 #
 # greet yell joe
-# => HELLO JOE!!!
+# => HELLO JOE
 #
+# greet --bang yell joe
+# => HELLO JOE
 #
+
 class GreeterApp < Decline::Command
   def options(cli)
     cli.on("-b", "--bang", "Add excitment") do |value|
@@ -32,6 +35,12 @@ class GreeterApp < Decline::Command
 end
 
 class YellCommand < Decline::Command
+  def options(cli)
+    cli.on("-i", "Add insight") do
+      config.insight = true
+    end
+
+  end
   def call(args)
     puts "#{args.join.upcase}#{config.bang ? '!' : ''}"
   end
@@ -40,4 +49,4 @@ end
 app = GreeterApp.new
 app.add_command :yell, YellCommand.new
 
-exit app.run(ARGV)
+app.run(ARGV)

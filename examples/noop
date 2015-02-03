@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+# Run with bundler:
+#
+# bundle exec ./examples/noop
+#
+
+require 'decline'
+
+class NoOpApp < Decline::Command
+  # Nothing to see here
+  #
+  # For details refer to ../lib/decline/command
+end
+
+app = NoOpApp.new
+app.run(ARGV)
